@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding="ISO-8859-1" standalone="no" ?>
+<WMS_Capabilities xmlns="http://www.opengis.net/wms" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.3.0" xsi:schemaLocation="http://www.opengis.net/wms http://schemas.opengis.net/wms/1.3.0/capabilities_1_3_0.xsd">
+<Service>
+  <Name>WMS</Name>
+  <Title>{{json.layers[0].name}}</Title>
+  <Abstract>WMS Service for {{json.layers[0].name}}</Abstract>
+        <KeywordList>
+          <Keyword> New Mexico</Keyword>
+        </KeywordList>
+  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{json.url}}"/>
+  <ContactInformation>
+    <ContactPersonPrimary>
+      <ContactPerson>TEST</ContactPerson>
+      <ContactOrganization>Earth Data Analysis Center</ContactOrganization>
+    </ContactPersonPrimary>
+      <ContactPosition>technical support</ContactPosition>
+    <ContactAddress>
+        <AddressType>Mailing address</AddressType>
+        <Address>Earth Data Analysis Center, MSC01 1110, 1 University of New Mexico</Address>
+        <City>Albuquerque</City>
+        <StateOrProvince>NM</StateOrProvince>
+        <PostCode>87131</PostCode>
+        <Country>US</Country>
+    </ContactAddress>
+      <ContactVoiceTelephone>(505) 277-3622</ContactVoiceTelephone>
+      <ContactFacsimileTelephone>(505) 277-3614</ContactFacsimileTelephone>
+  <ContactElectronicMailAddress>gstore@edac.unm.edu</ContactElectronicMailAddress>
+  </ContactInformation>
+  <Fees>None</Fees>
+  <AccessConstraints>none</AccessConstraints>
+  <MaxWidth>2048</MaxWidth>
+  <MaxHeight>2048</MaxHeight>
+</Service>
+
+<Capability>
+  <Request>
+    <GetCapabilities>
+      <Format>text/xml</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{json.url}}?"/></Get>
+        </HTTP>
+      </DCPType>
+    </GetCapabilities>
+    <GetMap>
+      <Format>image/png</Format>
+      <DCPType>
+        <HTTP>
+          <Get><OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{json.url}}?"/></Get>
+        </HTTP>
+      </DCPType>
+    </GetMap>
+
+  </Request>
+  <Exception>
+    <Format>XML</Format>
+    <Format>INIMAGE</Format>
+    <Format>BLANK</Format>
+  </Exception>
+  {% for layer in json.layers %}
+  <Layer>
+    <Name>{{layer.name}}</Name>
+    <Title>{{layer.name}}</Title>
+    <Abstract>WMS Service for {{layer.name}} </Abstract>
+    <KeywordList>
+     <Keyword> New Mexico</Keyword>
+    </KeywordList>
+    <CRS>EPSG:4326</CRS>
+    <EX_GeographicBoundingBox>
+        <westBoundLongitude>{{layer.wbc}}</westBoundLongitude>
+        <eastBoundLongitude>{{layer.ebc}}</eastBoundLongitude>
+        <southBoundLatitude>{{layer.sbc}}</southBoundLatitude>
+        <northBoundLatitude>{{layer.nbc}}</northBoundLatitude>
+    </EX_GeographicBoundingBox>
+    <BoundingBox CRS="EPSG:4326"
+                minx="{{layer.sbc}}" miny="{{layer.wbc}}" maxx="{{layer.nbc}}" maxy="{{layer.ebc}}" />
+    <Layer queryable="0" opaque="0" cascaded="0">
+        <Name>{{layer.name}}</Name>
+        <Title>{{layer.name}}</Title>
+        <Abstract>{{layer.name}}</Abstract>
+        <KeywordList>
+          <Keyword></Keyword>
+        </KeywordList>
+        <CRS>EPSG:4326</CRS>
+    <EX_GeographicBoundingBox>
+        <westBoundLongitude>{{layer.wbc}}</westBoundLongitude>
+        <eastBoundLongitude>{{layer.ebc}}</eastBoundLongitude>
+        <southBoundLatitude>{{layer.sbc}}</southBoundLatitude>
+        <northBoundLatitude>{{layer.nbc}}</northBoundLatitude>
+    </EX_GeographicBoundingBox>
+        <BoundingBox CRS="EPSG:4326"
+                    minx="{{layer.sbc}}" miny="{{layer.wbc}}" maxx="{{layer.nbc}}" maxy="{{layer.ebc}}" />
+        <MetadataURL type="FGDC-STD-001-1998">
+          <Format>text/xml</Format>
+        </MetadataURL>
+    </Layer>
+  </Layer>
+  {% endfor %}
+</Capability>
+</WMS_Capabilities>
