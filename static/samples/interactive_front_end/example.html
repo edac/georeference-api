@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.css">
+
+  <!-- <link rel="stylesheet" href="https://historicalaerialphotos.org/static/css/main.css"> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.min.js"></script>
+  <script type="text/javascript" src="https://historicalaerialphotos.org/static/js/main.js"></script>
+  <script src="https://historicalaerialphotos.org/static/js/jquery-3.4.1.js"></script>
+  <script src="https://historicalaerialphotos.org/static/js/ol.js"></script>
+  <script src="https://historicalaerialphotos.org/static/js/jQueryRotate.js"></script>
+  <link rel="stylesheet" href="https://historicalaerialphotos.org/static/css/ol.css">
+  <!-- Main Quill library -->
+  <!-- <script src="//cdn.quilljs.com/1.3.6/quill.js"></script> -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+  <!-- Theme included stylesheets -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
+.footer-bottom{width:100%;position:fixed;bottom:0;z-index:1;height:4%}.datasetspanelx{background-color:#f0f8ff;border-radius:5px}.overlay{display:none;height:0;overflow:visible;pointer-events:none;background:0 0!important}.gcpcard{width:773px!important;height:367px!important}.modaloverlay{position:fixed;display:none;width:100%;height:100%;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,.5);z-index:2;cursor:pointer}.modalspinner{position:absolute;top:50%;left:50%;font-size:50px;color:#fff;transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%)}.searchpanel{background-color:#fff;border-style:double}.mdl-layout__header{min-height:32px}.containerx{position:absolute;left:50%;top:40px;transform:translate(-50%,0);perspective:1000px;width:330px;height:375px;z-index:1}.mdl-card{width:330px}.mdl-card__title .mdl-button--icon{height:28px;width:28px;min-width:28px}.mdl-textfield__label{color:rgba(0,0,0,.5)}.updateprofilebutton{text-align:center;margin-top:27px}a:hover{cursor:pointer}.transparent{opacity:.5;pointer-events:none}.nara-layout-transparent{height:9%;background-color:#fff;color:#fff9e4}.naraheader{height:11%}.whitetext{color:#fff}.mdl-card__supporting-text{font-size:1rem;line-height:18px;overflow:hidden;padding:16px 16px;width:90%}.uploadwindow{background-color:#157ac7}.fullcard{text-align:left;padding:15px;width:100%;background-color:#fff;cursor:pointer}.fullcard:hover{background:#f4f4f4}.center{text-align:center}.mdl-grid.center-items{justify-content:center}.cardimg{vertical-align:middle;width:40%;align-self:center;margin-top:10px}.text-align-center{text-align:center;margin-top:35px}#titleinput{background-color:#fff}.mdl-textfield{width:100%}.gcptbody{max-height:92%;overflow:auto}.top15px{margin-top:15px}.windowlabel{height:3%;color:#fff;font-family:panthon,"Century Gothic",CenturyGothic,AppleGothic,sans-serif;font-size:13pt;background-color:#037ac8ff;border-bottom-style:solid;border-bottom-width:1px}.delete-button-small{height:25px;min-width:25px;width:25px}.gcpbody{border-style:ridge;padding:0;line-height:17px;background-color:#f5f5f5;border-radius:9px;cursor:pointer}.gcpbody:hover{background-color:#0e2230;color:#fff}.marker-container{justify-content:center}.titlediv{font-family:panthon,"Century Gothic",CenturyGothic,AppleGothic,sans-serif;color:#000;font-size:31pt;letter-spacing:.15em;margin-top:12px;text-align:center}.subtitlediv{font-family:panthon,"Century Gothic",CenturyGothic,AppleGothic,sans-serif;color:#000;font-size:22pt;margin-top:23px;text-align:center}.indexbody{height:88%!important}.markerstyle{background-color:red;width:7px;height:7px;border-radius:50%;border-style:solid;border-width:2px}.workwindow{height:100%;padding:0}.fullheight{height:100%}.width100{width:100%}.ninesevenheight{height:97%}.ninesixheight{height:96%}.ninefiveheight{height:95%}.ninefourheight{height:94%}.spinner{position:fixed;z-index:1;margin-top:29%}.gcpcolumn{margin-top:13px}.qaqcwidget{margin-bottom:5px;margin-top:5px;margin-left:5px}.mdl-switch.is-checked .mdl-switch__thumb{background:#131835!important}.gcppanel{background-color:#fff;height:66.6%;border-style:double;border-bottom-left-radius:10px;border-bottom-right-radius:10px;position:relative}.gcpbuttons{background-color:#fff;height:15%;border:#999090;border-style:double;border-top-right-radius:10px;border-top-left-radius:10px}.mappanel{margin:0;background-color:#3276ce}@media screen and (max-width:1024px){.titlediv{font-family:panthon,"Century Gothic",CenturyGothic,AppleGothic,sans-serif;color:#000;font-size:24pt;margin-top:5px;text-align:center}.subtitlediv3{color:#fff9e4;font-size:22pt;margin-top:23px;text-align:center}.subtitlediv{font-family:panthon,"Century Gothic",CenturyGothic,AppleGothic,sans-serif;display:none}}body{height:100%;background-color:#037ac8ff}.mdl-textfield--file .mdl-textfield__input{box-sizing:border-box;width:calc(100% - 32px)}.mdl-textfield--file .mdl-button--file{right:0}.ol-viewport{border-radius:10px}#imgmap{height:98%;border-radius:75px}.gcp-text{height:50%;overflow:auto!important}.mdl-layout__header-row{height:1px}
+  </style>
+</head>
+
+<body>
+
+  <div class="naraheader nara-layout-transparent mdl-layout ">
+    <header class="mdl-layout__header mdl-layout__header--transparent">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title"></span>
+        <!-- Add spacer, to align navigation to the right -->
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation">
+
+
+        </nav>
+      </div>
+    </header>
+
+    <main class="titledivoverflow mdl-layout__content">
+
+      <div class=" strokeme titlediv">
+        NARA API EXAMPLE FRONT END
+      </div>
+
+    </main>
+
+  </div>
+  <div id="indexbody" class="indexbody">
+
+    <div class="workwindow content-grid mdl-grid center-items mdl-grid--no-spacing">
+
+      <div class="mdl-cell mdl-cell--5-col mdl-typography--text-center workpanelx">
+        <div class="windowlabel">Raw Image</div>
+        <div style="display:none" id="imgmap"
+          class="workwindow content-grid mdl-grid center-items mdl-grid--no-spacing">
+
+        </div>
+        <div id="uploaddiv" class=" uploadwindow content-grid mdl-grid center-items">
+          <div class="mdl-cell mdl-cell--2-col "></div>
+          <div class="mdl-cell mdl-cell--8-col ">
+            <div class="mdl-card fullcard">
+              <div class="mdl-card__supporting-text">
+
+
+                <form id="data" method="post" enctype="multipart/form-data">
+                  <input type=file name=file>
+                  <input type=submit value=Upload>
+
+                </form>
+
+
+              </div>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--2-col "></div>
+        </div>
+      </div>
+      <div class="mdl-cell mdl-cell--5-col mdl-typography--text-center datasetspanelx">
+        <div class="windowlabel">Reference Map</div>
+
+        <div id="map" class="map ninefourheight"></div>
+        <input id="swipe" type="range" style="width: 100%">
+      </div>
+      <div class="mdl-cell mdl-cell--2-col mdl-typography--text-center ">
+        <div class="searchpanel">
+          <form action="#">
+            <div class="mdl-textfield mdl-js-textfield">
+              <div style="font-size: x-small;">(RMSE errors are in meters.)</div>
+              RMSE:<span id="rmse"></span>
+
+
+            </div>
+            <div class="mdl-textfield mdl-js-textfield">
+
+
+
+            </div>
+          </form>
+        </div>
+        <div class="gcppanel mdl-typography--text-left">
+          <div>Click on GCP to zoom in.</div>
+          <div>Click on <i class="material-icons">delete_forever</i> to remove.</div>
+
+
+
+          <div id="gcptbody" class="gcptbody">
+
+          </div>
+
+
+        </div>
+        <div class="gcpbuttons">
+          <div class="mdl-card__actions mdl-card--border ">
+
+            <div id="spinner" style="display: none;">
+              <img src="https://historicalaerialphotos.org/static/images/spingear.gif" alt="loading">
+            </div>
+
+
+
+            <div id="submitpreviewdiv" class="margin-top: 10px;">
+              <a class="mdl-button cube-button mdl-js-button mdl-js-ripple-effect submitdissabled" id="download_interaction"
+                disabled>
+                Download
+              </a>
+              <a class="mdl-button cube-button mdl-js-button mdl-js-ripple-effect submitdissabled" id="showgcps">
+                Show GCPs
+              </a>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div id="overlay" class="modaloverlay">
+      <div id="spin" class="modalspinner">
+
+        <div class="demo-card-wide mdl-card gcpcard mdl-shadow--2dp">
+          <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">Current GCPs</h2>
+          </div>
+          <div class="mdl-card__supporting-text gcp-text">
+
+
+          </div>
+          <div class="mdl-button  mdl-js-button mdl-js-ripple-effect" id="closecard">
+            Close
+          </div>
+
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+    apihosturl = "https://api.historicalaerialphotos.org"
+    
+    
+    
+    //UPLOAD Interaction
+    $("form#data").submit(function (e) {
+      e.preventDefault();
+      var formData = new FormData(this);
+
+      $.ajax({
+        url: apihosturl + "/api/upload",
+        type: 'POST',
+        data: formData,
+        success: function (data) {
+          Window.thisuuid = data.uuid
+          imagewidth = data.width
+          imageheight = data.height
+          optionstring = ""
+          var extent = [0, 0, imagewidth + 1, -1 * imageheight];
+          var projection = new ol.proj.Projection({
+            code: 'rawfile',
+            units: 'pixels',
+            axisOrientation: 'wnu',
+            extent: extent
+
+          });
+
+          newrawimageview = new ol.View({
+            projection: projection,
+            center: ol.extent.getCenter(extent),
+            zoom: 1,
+          })
+
+          newimgsource = new ol.source.ImageWMS({
+            url: apihosturl + '/api/ogc/' + Window.thisuuid + '/wms',//'/ogc/' + {{ id }} + '/wms',
+            params: { 'LAYERS': 'RAW' },
+            projection: projection,
+            serverType: 'mapserver'
+          })
+          raw_layer = new ol.layer.Image({
+            source: newimgsource
+          });
+
+          var imglayers = Window.imgmap.getLayers();
+          imglayers.insertAt(0, raw_layer);
+          Window.imgmap.setView(newrawimageview)
+          $('#uploaddiv').hide()
+
+          $('#imgmap').show()
+
+          Window.imgmap.setTarget('imgmap');
+          Window.imgmap.updateSize()
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+      });
+    });
+
+
+    // RMSE Interaction
+    function rmseGen() {
+
+
+      $('.gcp-text').text(JSON.stringify(gcps))
+      $.ajax({
+        type: "POST",
+        url: apihosturl + "/api/rmse/" + Window.thisuuid,
+        data: JSON.stringify(gcps),
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+          if (data.status == 'success') {
+            if (data.rmsevals.length >= 3) {
+              $("#download_interaction").attr('disabled', false);
+            } else {
+              $("#download_interaction").attr('disabled', true);
+            }
+            errorsum = 0
+            errorcount = 0
+            for (var i = 0; i < data.rmsevals.length; i++) {
+
+              var obj = data.rmsevals[i];
+              keyname = Object.keys(data.rmsevals[i])[0]
+              y1 = obj[keyname]["predicted"]["lon"]
+              y2 = obj[keyname]["observed"]["lon"]
+              x1 = obj[keyname]["predicted"]["lat"]
+              x2 = obj[keyname]["observed"]["lat"]
+
+              var a = x1 - x2;
+              var b = y1 - y2;
+              var c = Math.sqrt(a * a + b * b);
+              if (Object.keys(gcps).length >= 7) {
+                $("#error" + keyname).text(c.toFixed(10))
+              } else {
+                $("#error" + keyname).text("NA")
+              }
+              errorsum = errorsum + c
+              errorcount = errorcount + 1
+
+
+            }
+            errormean = errorsum / errorcount
+            finalrmse = Math.sqrt(errormean)
+            rmseText = 'Please pick ' + (7 - Object.keys(gcps).length).toString() + ' more point(s) to calculate error.'
+            if (Object.keys(gcps).length >= 7) {
+              $("#rmse").text(finalrmse.toFixed(10))
+            } else {
+              $("#rmse").text(rmseText)
+            }
+
+          } else {
+          }
+          if (Object.keys(gcps).length >= 3) {
+            GeoreferenceInteraction()
+          }
+        },
+      });
+    }
+
+
+
+
+    //Georeference Interaction
+    function GeoreferenceInteraction() {
+      $('#spinner').show();
+      $.ajax({
+        type: "POST",
+        url: apihosturl + "/api/georeference/" + Window.thisuuid,
+        data: JSON.stringify(gcps),
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+          if (data.status == 'success') {
+
+            missing_preview = true
+            map.getLayers().forEach(function (layer) {
+              if (layer.get('name') === 'Preview') {
+                missing_preview = false
+              }
+            });
+            if (missing_preview) {
+              var previewwms = new ol.source.ImageWMS({
+                url: apihosturl + '/api/ogc/' + Window.thisuuid + '/wms',
+                params: { 'LAYERS': 'PREVIEW' },
+                ratio: 1,
+                serverType: 'mapserver'
+              })
+              Window.previewlayer = new ol.layer.Image({
+                'opacity': 1.00000,
+                name: 'Preview',
+                source: previewwms
+              }, 0)
+              map.addLayer(Window.previewlayer);
+            }
+            $('#spinner').hide();
+            $('#rmpreveiwdiv').show();
+            Window.previewlayer.getSource().updateParams({ "time": Date.now() });
+            Window.previewlayer.on('prerender', function (event) {
+              var ctx = event.context;
+              var mapSize = map.getSize();
+              var width = mapSize[0] * (swipe.value / 100);
+              // bounding box coordinates top left/right bottom left/right
+              var tl = ol.render.getRenderPixel(event, [width, 0]);
+              var tr = ol.render.getRenderPixel(event, [mapSize[0], 0]);
+              var bl = ol.render.getRenderPixel(event, [width, mapSize[1]]);
+              var br = ol.render.getRenderPixel(event, mapSize);
+
+              ctx.save();
+              ctx.beginPath();
+              ctx.moveTo(tl[0], tl[1]);
+              ctx.lineTo(bl[0], bl[1]);
+              ctx.lineTo(br[0], br[1]);
+              ctx.lineTo(tr[0], tr[1]);
+              ctx.closePath();
+              ctx.clip();
+            });
+            Window.previewlayer.on('postrender', function (event) {
+              var ctx = event.context;
+              ctx.restore();
+            });
+            swipe.addEventListener('input', function () {
+              map.render();
+            }, false);
+          } else {
+          }
+        },
+      });
+    }
+
+
+
+
+    //Download Interaction
+    $("#download_interaction").on("click", function () {
+      if (!$('#download_interaction').attr('disabled')) {
+
+        GeoreferenceInteraction()
+
+        fetch(apihosturl + '/api/download/' + Window.thisuuid)
+          .then(res => res.blob())
+          .then(blob => {
+            var file = window.URL.createObjectURL(blob);
+            window.location.assign(file);
+          });
+
+
+      }
+    })
+
+
+    function countProperties(obj) {
+      var count = 0;
+
+      for (var prop in obj) {
+        if (obj.hasOwnProperty(prop))
+          ++count;
+      }
+
+      return count;
+    }
+
+
+
+
+
+    False = false
+    True = true
+    showgeohelp = False
+    gcps = {}
+    var gcps_string = JSON.stringify(gcps);
+    $('.gcp-text').text(gcps_string)
+    $("#closecard").on("click", function () {
+      $("#overlay").hide()
+    })
+    $("#showgcps").on("click", function () {
+      $("#overlay").show()
+    })
+
+    //zoom into both points when the right hand side gcp is clicked.
+      $("#gcptbody").on("click", "div.gcpbody", function () {
+        //get gcp key name from the text that was loaded.
+        gcpskey = $(this)[0].children[0].innerText
+        //get lat and lon ,and row col from the list of gcps using the key.
+        lat = gcps[gcpskey]['lat']
+        long = gcps[gcpskey]['lon']
+        row = gcps[gcpskey]['row'] * -1;
+        col = gcps[gcpskey]['col'];
+        //animate the map and image view using the coords from the gcps json. 
+        mapview.animate({
+          center: [lat, long],
+          zoom: 20,
+          duration: 200
+        });
+        newrawimageview.animate({
+          center: [col, row],
+          zoom: 2,
+          duration: 200
+        });
+
+      });
+
+
+
+
+
+
+
+
+
+    $("#rmpreveiw").click(function () {
+      map.getLayers().forEach(layer => {
+        if (layer && layer.get('name') === 'Preview') {
+          map.removeLayer(layer);
+        }
+      });
+
+      $('#rmpreveiwdiv').hide();
+      $("#download_interaction").attr('disabled', true);
+      //$('#gcppreveiwdiv').show();
+      GeoreferenceInteraction()
+    })
+    Window.colorcount = 0
+    Window.colorlist = ['#00FF00', '#0000FF', '#FF0000', '#01FFFE', '#FFA6FE', '#FFDB66', '#006401', '#010067', '#95003A', '#007DB5', '#FF00F6', '#FFEEE8', '#774D00', '#90FB92', '#0076FF', '#D5FF00', '#FF937E', '#6A826C', '#FF029D', '#FE8900', '#7A4782', '#7E2DD2', '#85A900', '#FF0056', '#A42400', '#00AE7E', '#683D3B', '#BDC6FF', '#263400', '#BDD393', '#00B917', '#9E008E', '#001544', '#C28C9F', '#FF74A3', '#01D0FF', '#004754', '#E56FFE', '#788231', '#0E4CA1', '#91D0CB', '#BE9970', '#968AE8', '#BB8800', '#43002C', '#DEFF74', '#00FFC6', '#FFE502', '#620E00', '#008F9C', '#98FF52', '#7544B1', '#B500FF', '#00FF78', '#FF6E41', '#005F39', '#6B6882', '#5FAD4E', '#A75740', '#A5FFD2', '#FFB167', '#009BFF', '#E85EBE']
+    Window.active_div = "image"
+    Window.sum = 0
+    //Root Mean Square Calculation
+    function rmse(gcpjson) {
+
+      for (var key in gcpjson) {
+        sqr = Math.pow(gcpjson[key]['lat'] - gcpjson[key]['lat'], 2)
+        Window.sum = Window.sum + sqr
+      }
+    }
+    var imgmarkers = new ol.source.Vector({
+
+    });
+    var imgmarkerVectorLayer = new ol.layer.Vector({
+      source: imgmarkers,
+    });
+
+
+
+    $(document).ready(function () {
+      componentHandler.upgradeDom();
+      currentgcpcount = countProperties(gcps)
+
+      gcpindex = 0
+      for (gcp in gcps) {
+        var iconStyle = new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 5,
+            fill: new ol.style.Fill({ color: Window.colorlist[gcp] }),
+            stroke: new ol.style.Stroke({
+              color: [0, 0, 0], width: 2
+            })
+          }),
+          text: new ol.style.Text({
+            textAlign: "center",
+            textBaseline: "bottom",
+            font: "Arial",
+            // added given gcp id
+            text: gcp,
+            fill: new ol.style.Fill({ color: "black" }),
+            // add halo to numbering for easier reading
+            stroke: new ol.style.Stroke({ color: "#ffffff", width: 3 }),
+            offsetX: 0,
+            offsetY: 0,
+            placement: "point",
+            maxAngle: 0.7853981633974483,
+            rotation: 0
+          })
+        })
+        imgcoordinate = [gcps[gcp]['col'], -1 * gcps[gcp]['row']]
+        mapcoordinate = [gcps[gcp]['lat'], gcps[gcp]['lon']]
+        var imgmarker = new ol.Feature({
+          geometry: new ol.geom.Point(imgcoordinate),
+        });
+        var mapmarker = new ol.Feature({
+          geometry: new ol.geom.Point(mapcoordinate),
+        });
+        imgmarker.setProperties({ 'name': gcp, 'description': 'imagepoint' })
+        imgmarker.setStyle(iconStyle);
+        mapmarker.setProperties({ 'name': gcp, 'description': 'mappoint' })
+        mapmarker.setStyle(iconStyle);
+        imgmarkers.addFeature(imgmarker);
+        mapmarkers.addFeature(mapmarker)
+
+
+        template = `                    <div class="mdl-grid gcpbody" id="gcpdom` + gcp.toString() + `"> <div class="mdl-cell mdl-cell--1-col top15px ">` + gcp.toString() + `</div>
+  
+                          <div class="mdl-cell mdl-cell--2-col ">
+                  
+                              <div class="mdl-grid marker-container">
+                                  <div class="markerstyle" style="background-color: `+ Window.colorlist[gcp] + `;"></div>
+                              </div>
+                          </div>
+  
+                          
+                          <div class="mdl-cell mdl-cell--6-col gcpcolumn">
+  
+                              <div>
+                                  Error:<span id="error`+ gcp.toString() + `" ></span>
+                              </div>
+                          </div>
+                          <div class="mdl-cell mdl-cell--2-col ">
+                              
+                              <button onclick="deletegcp(`+ gcp.toString() + `)" class=" mdl-button mdl-js-button mdl-button--fab delete-button-small ">
+                                  <i class="material-icons">delete_forever</i>
+                              </button>
+                          </div>
+                      </div>
+                      </div>`
+        $("#gcptbody").append(template)
+
+        Window.colorcount = parseInt(gcp) + 1
+        gcpindex = parseInt(gcp) + 1
+      }
+
+
+
+
+
+
+      var imgselect = new ol.interaction.Select();
+      var imgtranslate = new ol.interaction.Translate({
+        features: imgselect.getFeatures()
+      });
+
+      Window.imgmap = new ol.Map({
+
+        interactions: ol.interaction.defaults().extend([imgselect, imgtranslate, new ol.interaction.DragRotateAndZoom()
+        ]),
+
+        layers: [
+
+          imgmarkerVectorLayer
+        ],
+
+      });
+
+
+
+      imgtranslate.on('translating', function (evt) {
+        gcps[imgtranslate.lastFeature_.values_.name]["col"] = evt.coordinate[0] - 1
+        gcps[imgtranslate.lastFeature_.values_.name]["row"] = -1 * evt.coordinate[1] //imageheight - evt.coordinate[1]
+        $("#col" + imgtranslate.lastFeature_.values_.name).text(gcps[imgtranslate.lastFeature_.values_.name].col.toPrecision(6))
+        $("#row" + imgtranslate.lastFeature_.values_.name).text(gcps[imgtranslate.lastFeature_.values_.name].row.toPrecision(6))
+
+      });
+
+
+      imgtranslate.on('translateend', function (evt) {
+        wating_for_mapclick = false
+        imgselect.getFeatures().clear();
+        rmseGen();
+
+      });
+
+      Window.imgmap.on('aclick', function (event) {
+        rawcol = event.coordinate[0]
+        col = Math.round(rawcol);
+        rawrow = event.coordinate[1]
+        row = Math.round(rawrow);
+        if (rawrow >= 0 && rawcol >= 0 && rawcol <= imagewidth && rawrow <= imageheight) {
+        }
+
+      });
+
+
+      Window.imgmap.on('singleclick', function (evt) {
+        if (!wating_for_mapclick) {
+          NotaFeature = true
+          Window.imgmap.forEachFeatureAtPixel(evt.pixel, function (f) {
+            if (typeof f !== 'undefined') {
+              NotaFeature = false
+            }
+
+          })
+          if (NotaFeature) {
+            rawcol = evt.coordinate[0]
+            col = rawcol - 1 //Math.round(rawcol);
+            rawrow = -1 * evt.coordinate[1]
+            row = rawrow //Math.round(rawrow);
+
+
+            if (row >= 0 && col >= 0 && col <= imagewidth && row <= imageheight) {
+
+              if (typeof gcps[gcpindex.toString()] == "undefined") {
+                gcps[gcpindex.toString()] = {}
+              }
+
+
+              gcps[gcpindex.toString()]["row"] = row
+              gcps[gcpindex.toString()]["col"] = col
+              setPinOnMapImg(evt);
+
+              template = `                    <div class="mdl-grid gcpbody" id="gcpdom` + gcpindex.toString() + `"> <div class="mdl-cell mdl-cell--1-col top15px ">` + gcpindex.toString() + `</div>
+  
+                          <div class="mdl-cell mdl-cell--2-col ">
+  
+                              <div class="mdl-grid marker-container">
+                                  <div class="markerstyle" style="background-color: `+ Window.colorlist[gcpindex] + `;"></div>
+                              </div>
+                          </div>
+  
+  
+                          <div class="mdl-cell mdl-cell--6-col gcpcolumn">
+  
+                              <div>
+                                  Error:<span id="error`+ gcpindex.toString() + `" ></span>
+                              </div>
+                          </div>
+                          <div class="mdl-cell mdl-cell--2-col ">
+                              
+                              <button onclick="deletegcp(`+ gcpindex.toString() + `)" class=" mdl-button mdl-js-button mdl-button--fab delete-button-small ">
+                                  <i class="material-icons">delete_forever</i>
+                              </button>
+                          </div>
+                          </div>
+                          </div>`
+              $("#gcptbody").append(template)
+              $("#row" + gcpindex.toString()).text(gcps[gcpindex.toString()].row.toPrecision(6))
+              $("#col" + gcpindex.toString()).text(gcps[gcpindex.toString()].col.toPrecision(6))
+              wating_for_mapclick = true
+
+              currentgcpcount = countProperties(gcps)
+              if (currentgcpcount == 1) {
+                if (gcps[0] != undefined) {
+                  if (gcps[0].lat == undefined) {
+
+                  }
+                }
+              }
+
+            }
+          }
+
+        }
+      });
+
+
+
+      selected = null;
+
+
+      function clearMarkers() {
+
+        mapmarkers.getFeatures().forEach(function (mark) {
+          id = rmseGen(); rk.getProperties().name
+          var SelectediconStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 5,
+              fill: new ol.style.Fill({ color: Window.colorlist[id] }),
+              stroke: new ol.style.Stroke({
+                color: [0, 0, 0], width: 2
+              })
+            })
+          })
+          mark.setStyle(SelectediconStyle);
+        })
+        imgmarkers.getFeatures().forEach(function (mark) {
+          id = mark.getProperties().name
+          var SelectediconStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 5,
+              fill: new ol.style.Fill({ color: Window.colorlist[id] }),
+              stroke: new ol.style.Stroke({
+                color: [0, 0, 0], width: 2
+              })
+            })
+          })
+          mark.setStyle(SelectediconStyle);
+        })
+      }
+
+      var swipe = document.getElementById('swipe');
+
+
+    });
+
+    function deletegcp(gcpindex) {
+      gcpid = "#gcpdom" + gcpindex
+
+      imgmarkers.getFeatures().forEach(function (mark) {
+        if (mark.get("name") == gcpindex) {
+          // removeFeature
+          imgmarkers.removeFeature(mark)
+        }
+      });
+      mapmarkers.getFeatures().forEach(function (mark) {
+        if (mark.get("name") == gcpindex) {
+          // removeFeature
+          mapmarkers.removeFeature(mark)
+        }
+      });
+
+      delete gcps[gcpindex];
+      if (Object.keys(gcps).length < 3) {
+        $("#download_interaction").prop('disabled', true);
+      }
+
+      $(gcpid).remove();
+      rmseGen();
+      wating_for_mapclick = false; 
+      selected = null;
+    }
+
+    var mapmarkers = new ol.source.Vector({
+
+    });
+
+    var mapmarkerVectorLayer = new ol.layer.Vector({
+      source: mapmarkers,
+    });
+
+    var statewms = new ol.source.ImageWMS({
+      url: 'https://tigerweb.geo.census.gov/arcgis/services/TIGERweb/tigerWMS_Census2020/MapServer/WMSServer',
+      params: { 'LAYERS': 'States' },
+      ratio: 1,
+      serverType: 'mapserver'
+    })
+    var statelayer = new ol.layer.Image({
+
+      'opacity': 1.00000,
+      name: 'State',
+      source: statewms,
+      style: new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: 'red'
+        }),
+        stroke: new ol.style.Stroke({
+          color: 'white'
+        })
+      })
+    }, 0)
+
+    mapmarkerVectorLayer.setZIndex(4)
+    var layers = [
+
+      new ol.layer.Group({
+        'title': 'Base maps',
+        layers: [
+          new ol.layer.Tile({
+            'title': 'Google Maps',
+            'type': 'base',
+            visible: true,
+            'opacity': 1.000000,
+            projection: 'EPSG:3857',
+            source: new ol.source.XYZ({
+              attributions: [new ol.control.Attribution({ html: '<a href=""></a>' })],
+              url: 'http://mt1.google.com/vt/lyrs=s&hl=pl&&x={x}&y={y}&z={z}'
+            })
+          }),
+          statelayer,
+          mapmarkerVectorLayer,
+
+
+        ]
+      })
+
+    ];
+
+    var vectorSource = new ol.source.Vector({});
+
+
+    oo = [-105.9372, 35.6869]
+    var mapview = new ol.View({
+      projection: 'EPSG:4326',
+      center: oo,
+      zoom: 5
+    });
+
+    var select = new ol.interaction.Select();
+    var translate = new ol.interaction.Translate({
+      features: select.getFeatures()
+    });
+
+    var map = new ol.Map({
+      interactions: ol.interaction.defaults().extend([select, translate, new ol.interaction.DragRotateAndZoom(),]),
+      layers: layers,
+      target: 'map',
+      view: mapview
+    });
+
+
+    translate.on('translating', function (evt) {
+      gcps[translate.lastFeature_.values_.name]["lat"] = evt.coordinate[0]
+      gcps[translate.lastFeature_.values_.name]["lon"] = evt.coordinate[1]
+      $("#lat" + translate.lastFeature_.values_.name).text(gcps[translate.lastFeature_.values_.name].lat.toFixed(6))
+      $("#lon" + translate.lastFeature_.values_.name).text(gcps[translate.lastFeature_.values_.name].lon.toFixed(6))
+    });
+
+
+    translate.on('translateend', function (evt) {
+      wating_for_mapclick = false
+      select.getFeatures().clear();
+      rmseGen();
+
+    });
+
+    selected2 = null
+    wating_for_mapclick = false
+
+    map.on('singleclick', function (evt) {
+
+      if (wating_for_mapclick) {
+
+        map.forEachFeatureAtPixel(evt.pixel, function (f) {
+          selected2 = f;
+
+        })
+        if (selected2 == null) {
+          setPinOnMap(evt);
+          gcps[gcpindex.toString()]["lat"] = evt.coordinate[0]
+          gcps[gcpindex.toString()]["lon"] = evt.coordinate[1]
+
+          $("#lat" + gcpindex.toString()).text(gcps[gcpindex.toString()].lat.toFixed(6))
+          $("#lon" + gcpindex.toString()).text(gcps[gcpindex.toString()].lon.toFixed(6))
+
+          optionstring = optionstring + "<br><br>-gcp<br> " + gcps[gcpindex.toString()]["col"] + " " + gcps[gcpindex.toString()]["row"] + " " + gcps[gcpindex.toString()]["lat"] + "<br> " + gcps[gcpindex.toString()]["lon"] + " "
+          rmse(gcps);
+
+          gcpindex++
+
+          $('#showgcp').html(optionstring);
+          rmseGen();
+        }
+
+        selected2 = null
+        wating_for_mapclick = false
+
+        currentgcpcount = countProperties(gcps)
+        if (showgeohelp) {
+          if (currentgcpcount == 1) {
+            // if (gcps[1] == undefined){
+            $("#overlay").show()
+
+
+          }
+        }
+      }
+    });
+
+
+
+    // add gcp point to map window
+    function setPinOnMap(evt) {
+      var gcpNum = Window.colorcount
+      if (Window.active_div == "map") {
+        var self = this;
+
+        var iconStyle = new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 5,
+            fill: new ol.style.Fill({ color: Window.colorlist[Window.colorcount] }),
+            stroke: new ol.style.Stroke({
+              color: [0, 0, 0], width: 2
+            })
+          }),
+          text: new ol.style.Text({
+            textAlign: "center",
+            textBaseline: "bottom",
+            font: "Arial",
+            // added given gcp id
+            text: gcpNum.toString(),
+            fill: new ol.style.Fill({ color: "black" }),
+            // add halo to numbering for easier reading
+            stroke: new ol.style.Stroke({ color: "#ffffff", width: 3 }),
+            offsetX: 0,
+            offsetY: 0,
+            placement: "point",
+            maxAngle: 0.7853981633974483,
+            rotation: 0
+          })
+        })
+
+
+        var marker = new ol.Feature({
+          geometry: new ol.geom.Point(evt.coordinate),
+        });
+        marker.setProperties({ 'name': Window.colorcount, 'description': 'mappoint' })
+        marker.setStyle(iconStyle);
+        mapmarkers.addFeature(marker);
+        Window.colorcount = Window.colorcount + 1
+      }
+      Window.active_div = "image"
+
+    }
+
+    // add gcp point to image window
+    function setPinOnMapImg(evt) {
+      var gcpNum = Window.colorcount
+      if (Window.active_div == "image") {
+        var iconStyle = new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 5,
+            fill: new ol.style.Fill({ color: Window.colorlist[Window.colorcount] }),
+            stroke: new ol.style.Stroke({
+              color: [0, 0, 0], width: 2
+            })
+          }),
+          text: new ol.style.Text({
+            textAlign: "center",
+            textBaseline: "bottom",
+            font: "Arial",
+            // added given gcp id
+            text: gcpNum.toString(),
+            fill: new ol.style.Fill({ color: "black" }),
+            // add halo to numbering for easier reading
+            stroke: new ol.style.Stroke({ color: "#ffffff", width: 3 }),
+            offsetX: 0,
+            offsetY: 0,
+            placement: "point",
+            maxAngle: 0.7853981633974483,
+            rotation: 0
+          })
+        })
+        var self = this;
+        var marker = new ol.Feature({
+          geometry: new ol.geom.Point(evt.coordinate),
+        });
+        marker.setProperties({ 'name': Window.colorcount, 'description': 'imagepoint' })
+        marker.setStyle(iconStyle);
+        imgmarkers.addFeature(marker);
+
+      }
+      Window.active_div = "map"
+    }
+
+
+
+  </script>
+</body>
+
+</html>
