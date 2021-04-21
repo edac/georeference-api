@@ -271,8 +271,8 @@
             }
             errormean = errorsum / errorcount
             finalrmse = Math.sqrt(errormean)
-            rmseText = 'Please pick ' + (7 - Object.keys(gcps).length).toString() + ' more point(s) to calculate error.'
-            if (Object.keys(gcps).length >= 7) {
+            rmseText = 'Please pick ' + (4 - Object.keys(gcps).length).toString() + ' more point(s) to calculate error.'
+            if (Object.keys(gcps).length >= 4) {
               $("#rmse").text(finalrmse.toFixed(10))
             } else {
               $("#rmse").text(rmseText)
@@ -364,13 +364,13 @@
       if (!$('#download_interaction').attr('disabled')) {
 
         GeoreferenceInteraction()
-
-        fetch(apihosturl + '/api/download/' + Window.thisuuid)
-          .then(res => res.blob())
-          .then(blob => {
-            var file = window.URL.createObjectURL(blob);
-            window.location.assign(file);
-          });
+        var link = document.createElement("a");
+        link.download = name;
+        link.href = apihosturl + '/api/download/' + Window.thisuuid;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        delete link;
 
 
       }
