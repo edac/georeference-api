@@ -229,7 +229,7 @@ def georeferencer(id):
     if job: #user has a georef job
         final_image=os.path.join(app.config['PUBLIC_UPLOAD_FOLDER'],job.uuid,job.original_imagename+".tif")
         translate_image=os.path.join(app.config['PUBLIC_UPLOAD_FOLDER'],job.uuid,job.uuid+"_trans.tif")
-        ds2 = gdal.Warp(final_image,translate_image, dstAlpha=True)
+        ds2 = gdal.Warp(final_image,translate_image, dstAlpha=True,dstSRS=4326)
         returnjson=json.loads('{"status":"success"}')
         return returnjson
     else:
@@ -269,7 +269,7 @@ def oneStepGeoreference(servicetype):
             del ds
             del dsx
             #Use the coefficients to warp pixel locations.
-            ds2 = gdal.Warp(warped_image,translate_image, dstAlpha=True)
+            ds2 = gdal.Warp(warped_image,translate_image, dstAlpha=True,dstSRS=4326)
             del ds2
             response = send_file(warped_image,as_attachment=True, attachment_filename='server.tif')
             return response
