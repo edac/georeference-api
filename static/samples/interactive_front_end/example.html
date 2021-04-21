@@ -79,7 +79,7 @@
         </div>
       </div>
       <div class="mdl-cell mdl-cell--5-col mdl-typography--text-center datasetspanelx">
-        <div class="windowlabel">Reference Map</div>
+        <div class="windowlabel">Reference Map </div>
 
         <div id="map" class="map ninefourheight"></div>
         <input id="swipe" type="range" style="width: 100%">
@@ -88,6 +88,8 @@
         <div class="searchpanel">
           <form action="#">
             <div class="mdl-textfield mdl-js-textfield">
+   
+              <button type="button" id="zoom_to_sample">Zoom to sample</button>
               <div style="font-size: x-small;">(RMSE errors are in meters.)</div>
               RMSE:<span id="rmse"></span>
 
@@ -200,7 +202,7 @@
           })
 
           newimgsource = new ol.source.ImageWMS({
-            url: apihosturl + '/api/ogc/' + Window.thisuuid + '/wms',//'/ogc/' + {{ id }} + '/wms',
+            url: apihosturl + '/api/ogc/' + Window.thisuuid + '/wms',
             params: { 'LAYERS': 'RAW' },
             projection: projection,
             serverType: 'mapserver'
@@ -427,7 +429,19 @@
       });
 
 
+    //zoom to sample
+    $("#zoom_to_sample").on("click",  function () {
+      //get gcp key name from the text that was loaded.
 
+      //animate the map and image view using the coords from the gcps json. 
+      mapview.animate({
+        center: [-107.57271,35.08677],
+        zoom: 14,
+        duration: 200
+      });
+      
+
+    });
 
 
 
@@ -568,7 +582,8 @@
 
 
       imgtranslate.on('translating', function (evt) {
-        gcps[imgtranslate.lastFeature_.values_.name]["col"] = evt.coordinate[0] - 1
+
+        gcps[imgtranslate.lastFeature_.values_.name]["col"] = evt.coordinate[0]
         gcps[imgtranslate.lastFeature_.values_.name]["row"] = -1 * evt.coordinate[1] //imageheight - evt.coordinate[1]
         $("#col" + imgtranslate.lastFeature_.values_.name).text(gcps[imgtranslate.lastFeature_.values_.name].col.toPrecision(6))
         $("#row" + imgtranslate.lastFeature_.values_.name).text(gcps[imgtranslate.lastFeature_.values_.name].row.toPrecision(6))
@@ -605,7 +620,7 @@
           })
           if (NotaFeature) {
             rawcol = evt.coordinate[0]
-            col = rawcol - 1 //Math.round(rawcol);
+            col = rawcol  //Math.round(rawcol);
             rawrow = -1 * evt.coordinate[1]
             row = rawrow //Math.round(rawrow);
 
@@ -811,6 +826,7 @@
 
 
     translate.on('translating', function (evt) {
+
       gcps[translate.lastFeature_.values_.name]["lat"] = evt.coordinate[0]
       gcps[translate.lastFeature_.values_.name]["lon"] = evt.coordinate[1]
       $("#lat" + translate.lastFeature_.values_.name).text(gcps[translate.lastFeature_.values_.name].lat.toFixed(6))
