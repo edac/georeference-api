@@ -1,31 +1,35 @@
+#!/usr/bin/python
+
 import requests
 import json
+import os
+import xlrd
 
+url = "https://api.historicalaerialphotos.org/api/georeference"
+output_folder="output"
 
-url = "https://historicalaerialphotos.org/api/georeference"
-gcpdata={"gcps":[[-107.39034771728776718,35.069414251691434,386.36910234064242786,316.20763251741624345],
-[-107.39038820002527075,35.06928968942222014,375.8142408878498486,342.59478614939763474],
-[-107.39066535107426148,35.06973499953465279,316.70701675221158666,250.76749151010244532],
-[-107.38903669940431485,35.06934262838663585,627.0199434643125187,455.531803694277869],
-[-107.39124456562609566,35.06883892971050187,221.71326367707843019,461.86472056595346203],
-[-107.3899257626008108,35.06889653976001142,469.22476474506373734,425.97819162645879487],
-[-107.39152638776016602,35.06993663470795042,149.14859118912988833,214.08934796164834324],
-[-107.39152638776016602,35.06969373828297876,152.84279269760747866,273.32850786544645416],
-[-107.38887788251105349,35.07020911467184021,647.99773060173743033,123.5814110039523257],
-[-107.38905694077305952,35.07004251263676764,615.80540317072018297,162.10665530664510925],
-[-107.3893076223398424,35.07018575924636394,566.72529741523499069,132.55304323882597828]]
-}
-payload = {}
-files = [
-  ('document', open('sampletif.tif','rb')),
-  ('gcps', ('gcps', json.dumps(gcpdata), 'application/json'))
-]
-headers= {}
+if not os.path.isdir(output_folder):
+  os.mkdir(output_folder) 
 
-response = requests.request("POST", url, headers=headers, data = payload, files = files , stream=True)
-
-
-if response.status_code == 200:
-    with open("returned_georeferenced_file.tif", 'wb') as fd:
-        for chunk in response.iter_content(chunk_size=128):
+# Open the workbook
+wb = xlrd.open_workbook('./gcps.xls')
+sheet = wb.sheet_by_index(0)
+ 
+#For each row in the workbook
+for row in range(sheet.nrows):
+      #Get the filename and gcps
+      filename=sheet.cell_value(row, 0)
+      gcps=sheet.cell_value(row, 1)
+      #Build an array of tuples to upload the image and gcps at the same time.
+      files = [
+      ('document', open(filename,'rb')),
+      ('api_gcps', ('api_gcps', gcps, 'application/json'))
+      ]
+      #Upload the image and gcps.
+      response = requests.request("POST", url, files = files , stream=True)
+      if response.status_code == 200: #If the API returns 200
+        #Then save the response to a file.
+        with open(output_folder+"/"+filename+".tif", 'wb') as fd:
+          for chunk in response.iter_content(chunk_size=128):
             fd.write(chunk)
+
