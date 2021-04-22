@@ -255,53 +255,57 @@ def georeferencer(id):
 
 
 
-def oneStepGeoreference(servicetype):
+def oneStepGeoreference():
     if request.method == 'POST':
-        if servicetype=="georeference":
-            
-            data = dict(request.files)
-            posted_data = json.load(request.files['gcps'])
             file = request.files['document']
+            data = dict(request.files)
             filename = secure_filename(file.filename)
-            fpath=os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(fpath)
+            fpath=os.path.join(app.config['PUBLIC_UPLOAD_FOLDER'],"onestep", filename)
+            file.save(fpath)            
             # outpaths
-            translate_image=os.path.join(os.path.join(app.config['UPLOAD_FOLDER'], "temp"+file.filename))
-            warped_image=os.path.join(os.path.join(app.config['UPLOAD_FOLDER'], "final.tif"))
+            translate_image=os.path.join(os.path.join(app.config['PUBLIC_UPLOAD_FOLDER'],"onestep",  "temp"+file.filename))
+            warped_image=os.path.join(os.path.join(app.config['PUBLIC_UPLOAD_FOLDER'],"onestep",  "final.tif"))
             gcpList=[]
-            for gcp in posted_data['gcps']:
-                if gcp[2]<0:
-                    row=gcp[2]*-1
-                else:
-                    row=gcp[2]
-                if gcp[3]<0:
-                    col=gcp[3]*-1
-                else:
+            #We sould allow for multidimensional arrays ('gcps') as well as API based GCPs ('api_gcps') 
+            if 'gcps' in data:
+                posted_data = json.load(request.files['gcps'])
+                for gcp in posted_data['gcps']:
+                    #Normalize GCPs and append them to gcpList as gdal.GCP
+                    if gcp[2]<0:
+                        row=gcp[2]*-1
+                    else:
+                        row=gcp[2]
+                    if gcp[3]<0:
+                        col=gcp[3]*-1
+                    else:
+                        col=gcp[3]                
                     col=gcp[3]                
-                gcpList.append(gdal.GCP(gcp[0],gcp[1],0,row,col))
+                        col=gcp[3]                
+                    gcpList.append(gdal.GCP(gcp[0],gcp[1],0,row,col))
+            
+            elif 'api_gcps' in data:
+                #Append GCPs to gcpList as gdal.GCP
+                posted_data = json.load(request.files['api_gcps'])
+                for gcp in posted_data:
+                    gcpList.append(gdal.GCP(posted_data[gcp]['lat'],posted_data[gcp]['lon'],0,posted_data[gcp]['col'],posted_data[gcp]['row']))
+                
+            else:
+                return"No GCPs found."
+            #Translate using GCPs
             ds = gdal.Open(fpath)
             #Translate the image by adding the translation coefficients to the image headers. 
             dsx = gdal.Translate(translate_image, ds, outputSRS = 'EPSG:4326', GCPs = gcpList)
-            del ds
-            del dsx
+
             #Use the coefficients to warp pixel locations.
             ds2 = gdal.Warp(warped_image,translate_image, dstAlpha=True,dstSRS="EPSG:4326")
+            #cleanup
+            del ds
+            del dsx
             del ds2
+            #Return the warped image.
             response = send_file(warped_image,as_attachment=True, attachment_filename='server.tif')
             return response
         
-    if request.method == 'GET':
-        returnhtml='''<!DOCTYPE html>
-                        <html>
-                        <head>
-                        <title>Example</title>
-                        </head>
-                        <body>
-                        <h1>Sample Python script:</h1>
-                        <a href="/static/samples/sample.py">Python</a>
-                        </body>
-                        </html>'''
-        return(returnhtml)
 
 
 def download(uid):
