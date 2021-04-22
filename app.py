@@ -10,7 +10,7 @@ import gdal
 from osgeo import ogr
 from osgeo import osr
 import uuid 
-
+import math
 
 ################################
 ###########FUNCTIONS############
@@ -191,6 +191,8 @@ def rmseGen(uuid):
                 tr = gdal.Transformer( translated_ds, None, [] ) 
                 GT = translated_ds.GetGeoTransform()
                 wktPoints="MULTIPOINT ("
+                errorsum = 0
+                errorcount = 0
                 for gcp in gcpjson:
                     col=gcpjson[gcp]['col']
                     row=gcpjson[gcp]['row']
@@ -207,12 +209,26 @@ def rmseGen(uuid):
                     observedPoint.AddPoint(pnt[0],pnt[1])
                     observedPoint.AssignSpatialReference(InSR) # assign srs epsg_4326
                     observedPoint.TransformTo(OutSR)  # transform to epsg_26913
+                    x1=predictedPoint.GetX()
+                    y1=predictedPoint.GetY()
+                    x2=observedPoint.GetX()
+                    y2=observedPoint.GetY()
+                    a = x1 - x2
+                    b = y1 - y2
+                    c = math.sqrt(a * a + b * b)
+                    errorsum = errorsum + c
+                    errorcount = errorcount + 1
                     gcpobj={gcp:{"predicted":{"lat":predictedPoint.GetX(),"lon":predictedPoint.GetY()},"observed":{"lat":observedPoint.GetX(),"lon":observedPoint.GetY()}}}
                     wktPoints=wktPoints+"("+str(predictedPoint.GetX())+" "+str(predictedPoint.GetY())+"),("+str(observedPoint.GetX())+" "+str(observedPoint.GetY())+"),"
                     rmsevals.append(gcpobj)
+
+                errormean = errorsum / errorcount
+                finalrmse = math.sqrt(errormean)
+
                 returnjson=json.loads('{"status":"success"}')
                 returnjson['id']=job.id
                 returnjson['rmsevals']=rmsevals
+                returnjson['rmse']=finalrmse
             else:
                 returnjson=json.loads('{"status":"success"}')
                 returnjson['id']=job.id
@@ -239,53 +255,55 @@ def georeferencer(id):
 
 
 
-def oneStepGeoreference(servicetype):
+def oneStepGeoreference():
     if request.method == 'POST':
-        if servicetype=="georeference":
-            
-            data = dict(request.files)
-            posted_data = json.load(request.files['gcps'])
             file = request.files['document']
+            data = dict(request.files)
             filename = secure_filename(file.filename)
-            fpath=os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(fpath)
+            fpath=os.path.join(app.config['PUBLIC_UPLOAD_FOLDER'],"onestep", filename)
+            file.save(fpath)            
             # outpaths
-            translate_image=os.path.join(os.path.join(app.config['UPLOAD_FOLDER'], "temp"+file.filename))
-            warped_image=os.path.join(os.path.join(app.config['UPLOAD_FOLDER'], "final.tif"))
+            translate_image=os.path.join(os.path.join(app.config['PUBLIC_UPLOAD_FOLDER'],"onestep",  "temp"+file.filename))
+            warped_image=os.path.join(os.path.join(app.config['PUBLIC_UPLOAD_FOLDER'],"onestep",  "final.tif"))
             gcpList=[]
-            for gcp in posted_data['gcps']:
-                if gcp[2]<0:
-                    row=gcp[2]*-1
-                else:
-                    row=gcp[2]
-                if gcp[3]<0:
-                    col=gcp[3]*-1
-                else:
-                    col=gcp[3]                
-                gcpList.append(gdal.GCP(gcp[0],gcp[1],0,row,col))
+            #We sould allow for multidimensional arrays ('gcps') as well as API based GCPs ('api_gcps') 
+            if 'gcps' in data:
+                posted_data = json.load(request.files['gcps'])
+                for gcp in posted_data['gcps']:
+                    #Normalize GCPs and append them to gcpList as gdal.GCP
+                    if gcp[2]<0:
+                        row=gcp[2]*-1
+                    else:
+                        row=gcp[2]
+                    if gcp[3]<0:
+                        col=gcp[3]*-1
+                    else:
+                        col=gcp[3]                
+                    gcpList.append(gdal.GCP(gcp[0],gcp[1],0,row,col))
+            
+            elif 'api_gcps' in data:
+                #Append GCPs to gcpList as gdal.GCP
+                posted_data = json.load(request.files['api_gcps'])
+                for gcp in posted_data:
+                    gcpList.append(gdal.GCP(posted_data[gcp]['lat'],posted_data[gcp]['lon'],0,posted_data[gcp]['col'],posted_data[gcp]['row']))
+                
+            else:
+                return"No GCPs found."
+            #Translate using GCPs
             ds = gdal.Open(fpath)
             #Translate the image by adding the translation coefficients to the image headers. 
             dsx = gdal.Translate(translate_image, ds, outputSRS = 'EPSG:4326', GCPs = gcpList)
-            del ds
-            del dsx
+
             #Use the coefficients to warp pixel locations.
             ds2 = gdal.Warp(warped_image,translate_image, dstAlpha=True,dstSRS="EPSG:4326")
+            #cleanup
+            del ds
+            del dsx
             del ds2
+            #Return the warped image.
             response = send_file(warped_image,as_attachment=True, attachment_filename='server.tif')
             return response
         
-    if request.method == 'GET':
-        returnhtml='''<!DOCTYPE html>
-                        <html>
-                        <head>
-                        <title>Example</title>
-                        </head>
-                        <body>
-                        <h1>Sample Python script:</h1>
-                        <a href="/static/samples/sample.py">Python</a>
-                        </body>
-                        </html>'''
-        return(returnhtml)
 
 
 def download(uid):
@@ -293,7 +311,7 @@ def download(uid):
     if jobs:
         folder=os.path.join(app.config['PUBLIC_UPLOAD_FOLDER'],jobs.uuid)
         final_file=os.path.join(folder,jobs.original_imagename+".tif")
-        return send_from_directory(directory=folder, filename=jobs.original_imagename+".tif") 
+        return send_from_directory(directory=folder, filename=jobs.original_imagename+".tif" , as_attachment=True) 
     return"JOB NOT FOUND"
 
 def ogc(uid,servicetype):
