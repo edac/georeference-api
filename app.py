@@ -279,8 +279,6 @@ def oneStepGeoreference():
                         col=gcp[3]*-1
                     else:
                         col=gcp[3]                
-                    col=gcp[3]                
-                        col=gcp[3]                
                     gcpList.append(gdal.GCP(gcp[0],gcp[1],0,row,col))
             
             elif 'api_gcps' in data:
@@ -313,7 +311,7 @@ def download(uid):
     if jobs:
         folder=os.path.join(app.config['PUBLIC_UPLOAD_FOLDER'],jobs.uuid)
         final_file=os.path.join(folder,jobs.original_imagename+".tif")
-        return send_from_directory(directory=folder, filename=jobs.original_imagename+".tif") 
+        return send_from_directory(directory=folder, filename=jobs.original_imagename+".tif" , as_attachment=True) 
     return"JOB NOT FOUND"
 
 def ogc(uid,servicetype):
