@@ -10,7 +10,7 @@ import gdal
 from osgeo import ogr
 from osgeo import osr
 import uuid 
-
+import math
 
 ################################
 ###########FUNCTIONS############
@@ -191,6 +191,8 @@ def rmseGen(uuid):
                 tr = gdal.Transformer( translated_ds, None, [] ) 
                 GT = translated_ds.GetGeoTransform()
                 wktPoints="MULTIPOINT ("
+                errorsum = 0
+                errorcount = 0
                 for gcp in gcpjson:
                     col=gcpjson[gcp]['col']
                     row=gcpjson[gcp]['row']
@@ -207,12 +209,26 @@ def rmseGen(uuid):
                     observedPoint.AddPoint(pnt[0],pnt[1])
                     observedPoint.AssignSpatialReference(InSR) # assign srs epsg_4326
                     observedPoint.TransformTo(OutSR)  # transform to epsg_26913
+                    x1=predictedPoint.GetX()
+                    y1=predictedPoint.GetY()
+                    x2=observedPoint.GetX()
+                    y2=observedPoint.GetY()
+                    a = x1 - x2
+                    b = y1 - y2
+                    c = math.sqrt(a * a + b * b)
+                    errorsum = errorsum + c
+                    errorcount = errorcount + 1
                     gcpobj={gcp:{"predicted":{"lat":predictedPoint.GetX(),"lon":predictedPoint.GetY()},"observed":{"lat":observedPoint.GetX(),"lon":observedPoint.GetY()}}}
                     wktPoints=wktPoints+"("+str(predictedPoint.GetX())+" "+str(predictedPoint.GetY())+"),("+str(observedPoint.GetX())+" "+str(observedPoint.GetY())+"),"
                     rmsevals.append(gcpobj)
+
+                errormean = errorsum / errorcount
+                finalrmse = math.sqrt(errormean)
+
                 returnjson=json.loads('{"status":"success"}')
                 returnjson['id']=job.id
                 returnjson['rmsevals']=rmsevals
+                returnjson['rmse']=finalrmse
             else:
                 returnjson=json.loads('{"status":"success"}')
                 returnjson['id']=job.id
