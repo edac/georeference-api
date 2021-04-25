@@ -203,7 +203,7 @@
 
           newimgsource = new ol.source.ImageWMS({
             url: data.wms,
-            params: { 'LAYERS': 'RAW' },
+            params: { 'LAYERS': data.layer },
             projection: projection,
             serverType: 'mapserver'
           })
