@@ -202,7 +202,7 @@
           })
 
           newimgsource = new ol.source.ImageWMS({
-            url: apihosturl + '/api/ogc/' + Window.thisuuid + '/wms',
+            url: data.wms,
             params: { 'LAYERS': 'RAW' },
             projection: projection,
             serverType: 'mapserver'
