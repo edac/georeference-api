@@ -19,6 +19,7 @@ sheet = wb.sheet_by_index(0)
 for row in range(sheet.nrows):
       #Get the filename and gcps
       filename=sheet.cell_value(row, 0)
+      print("Processing "+filename)
       gcps=sheet.cell_value(row, 1)
       #Build an array of tuples to upload the image and gcps at the same time.
       files = [
@@ -32,4 +33,6 @@ for row in range(sheet.nrows):
         with open(output_folder+"/"+filename+".tif", 'wb') as fd:
           for chunk in response.iter_content(chunk_size=128):
             fd.write(chunk)
+        print(filename+".tif has been saved")
+print("DONE")
 
