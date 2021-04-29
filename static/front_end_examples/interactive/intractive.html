@@ -202,8 +202,8 @@
           })
 
           newimgsource = new ol.source.ImageWMS({
-            url: apihosturl + '/api/ogc/' + Window.thisuuid + '/wms',
-            params: { 'LAYERS': 'RAW' },
+            url: data.wms,
+            params: { 'LAYERS': data.layer },
             projection: projection,
             serverType: 'mapserver'
           })
@@ -259,7 +259,7 @@
               var a = x1 - x2;
               var b = y1 - y2;
               var c = Math.sqrt(a * a + b * b);
-              if (Object.keys(gcps).length >= 7) {
+              if (Object.keys(gcps).length >= 4) {
                 $("#error" + keyname).text(c.toFixed(10))
               } else {
                 $("#error" + keyname).text("NA")
