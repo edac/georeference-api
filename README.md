@@ -22,9 +22,9 @@ Georeference API requires the following libraries to work properly:
 
 -- flask - Flask is used as the web framework.
 
--- osgeo - Geospatial library. This is the workhorse of the API includes gdal,ogr,osr etc.
+-- werkzeug - used to secure filenames (Should be installed automaticly when installing flask.)
 
--- werkzeug - used to secure filenames
+-- osgeo - Geospatial library. This is the workhorse of the API includes gdal,ogr,osr etc.
 
 -- flask_sqlalchemy - used to communicate with the backend database
 
@@ -35,11 +35,9 @@ Georeference API requires the following libraries to work properly:
 -- standard libraries - os,uuid,math
 
 
+##Python Version
+This app was developed using Python 3.6.
 
-
-## Installation
-
-Coming soon!
 
 ## Development
 
