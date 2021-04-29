@@ -315,7 +315,7 @@ def download(uid):
     return"JOB NOT FOUND"
 
 def ogc(uid,servicetype):
-    wms_public='/tmp/wms_pub.png'
+    wms_public='/tmp/'+uid+'wms_pub.png'
     path=""
     layers=[]
     jobs=db.session.query(Jobs).filter(Jobs.uuid==uid).first()
@@ -388,21 +388,21 @@ def ogc(uid,servicetype):
                             gdalout=gdal.Translate(wms_public, ds, format="PNG", width=int(width), height=int(height), resampleAlg="average", projWin = projWin)
                             return send_file(wms_public)
                         if wmslayers=="PREVIEW":
-                            if os.path.exists('/tmp/wms2.png'):
+                            if os.path.exists('/tmp/'+uid+'wms2.png'):
                                 # remove temporary file to make space for rewrites
-                                os.remove('/tmp/wms2.png')
+                                os.remove('/tmp/'+uid+'wms2.png')
                             # set projection window bounds
                             projwin=[float(bboxarray[1]), float(bboxarray[2]), float(bboxarray[3]), float(bboxarray[0])]
                             
                             gdalout=gdal.Translate('/tmp/wms2.png', ds, format="PNG", width=int(width), height=int(height), resampleAlg="average", projWin = projwin)
                             return send_file('/tmp/wms2.png')
                         else:
-                            if os.path.exists('/tmp/wmsother.png'):
+                            if os.path.exists('/tmp/'+uid+'wmsother.png'):
                                 # remove temporary file to make space for rewrites
-                                os.remove('/tmp/wmsother.png')
+                                os.remove('/tmp/'+uid+'wmsother.png')
                             # translate and write image to temporary file
-                            gdalout=gdal.Translate('/tmp/wmsother.png', ds, format="PNG", width=int(width), height=int(height), resampleAlg="average", projWin = [float(bboxarray[1]), float(bboxarray[2]), float(bboxarray[3]), float(bboxarray[0])])
-                            return send_file('/tmp/wmsother.png')
+                            gdalout=gdal.Translate('/tmp/'+uid+'wmsother.png', ds, format="PNG", width=int(width), height=int(height), resampleAlg="average", projWin = [float(bboxarray[1]), float(bboxarray[2]), float(bboxarray[3]), float(bboxarray[0])])
+                            return send_file('/tmp/'+uid+'wmsother.png')
                         return send_file(wms_public)
                     if "REFERENCE"==wmslayers:
                         reference=db.session.query(Projects.reference_file).filter(Jobs.projectid==Projects.id).filter(Jobs.id==id).first()
@@ -411,13 +411,14 @@ def ogc(uid,servicetype):
                         ds = gdal.Open(ref_path)
                         # split bounding box coordinates into array
                         bboxarray=bbox.split(",")
-                        if os.path.exists('/tmp/wmsother.png'):
+                        if os.path.exists('/tmp/'+uid+'wmsother.png'):
                                 # remove temporary file to make space for rewrites
-                            os.remove('/tmp/wmsother.png')
+                            os.remove('/tmp/'+uid+'wmsother.png')
                             # translate and write image to temporary file
-                        gdalout=gdal.Translate('/tmp/wmsother.png', ds, format="PNG", width=int(width), height=int(height), resampleAlg="average", projWin = [float(bboxarray[1]), float(bboxarray[2]), float(bboxarray[3]), float(bboxarray[0])])
-                        return send_file('/tmp/wmsother.png')
-    return "ONlY WMS IS SUPPORTED."
+                        gdalout=gdal.Translate('/tmp/'+uid+'wmsother.png', ds, format="PNG", width=int(width), height=int(height), resampleAlg="average", projWin = [float(bboxarray[1]), float(bboxarray[2]), float(bboxarray[3]), float(bboxarray[0])])
+                        return send_file('/tmp/'+uid+'wmsother.png')
+    else:
+        return "ONLY WMS IS SUPPORTED."
 
 
 
